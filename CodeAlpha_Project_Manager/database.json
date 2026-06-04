@@ -1,0 +1,97 @@
+{
+    "globalTeam": [
+        {
+            "username": "system",
+            "email": "system@alphamanager.io"
+        },
+        {
+            "username": "mayu",
+            "email": "mayu@gmail.com"
+        },
+        {
+            "username": "sugu",
+            "email": "sugu@gmail.com"
+        },
+        {
+            "username": "pavi",
+            "email": "pavi@gmail.com"
+        },
+        {
+            "username": "kamalisaradha97",
+            "email": "kamalisaradha97@gmail.com"
+        },
+        {
+            "username": "kg",
+            "email": "kg@gmail.com"
+        },
+        {
+            "username": "sam",
+            "email": "sam@gmail"
+        },
+        {
+            "username": "mayugaa609",
+            "email": "mayugaa609@gmail.com"
+        },
+        {
+            "username": "suji",
+            "email": "suji@gmail.com"
+        }
+    ],
+    "projectBoards": [
+        {
+            "id": "board_1",
+            "name": "E-Commerce Launch Suite",
+            "description": "Task tracking matrix for tracking storefront application modules.",
+            "lists": [
+                {
+                    "name": "To Do",
+                    "tasks": [
+                        {
+                            "id": "task_sample",
+                            "title": "Setup Stripe Webhooks",
+                            "desc": "Configure secure handlers to track payment confirmation events.",
+                            "assignedTo": "system",
+                            "comments": [
+                                {
+                                    "user": "system",
+                                    "text": "Task created automatically.",
+                                    "timestamp": "Just now"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "In Progress",
+                    "tasks": [
+                        {
+                            "id": "task_1779950139702",
+                            "title": "Create Company Registration Page",
+                            "desc": ".",
+                            "assignedTo": "kamali",
+                            "comments": [
+                                {
+                                    "user": "kamali",
+                                    "text": "complete",
+                                    "timestamp": "07:07 pm"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Done",
+                    "tasks": [
+                        {
+                            "id": "task_1779950178621",
+                            "title": "Setup Project Folder & Code Files",
+                            "desc": "neat structure",
+                            "assignedTo": "mayu",
+                            "comments": []
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

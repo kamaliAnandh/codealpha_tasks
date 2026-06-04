@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaManager | Access Port</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-surface: #111827;
+            --brand: #3b82f6;
+            --brand-glow: rgba(59, 130, 246, 0.15);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+        .brand-header { font-size: 24px; font-weight: 800; margin-bottom: 6px; text-align: center; }
+        .brand-header span { color: var(--brand); }
+        .subtitle { font-size: 13.5px; color: var(--text-muted); margin-bottom: 30px; text-align: center; }
+        .form-group { margin-bottom: 20px; }
+        
+        /* Relative position context wrapper for the eye icon container button */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-field {
+            width: 100%;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px 16px;
+            border-radius: 12px;
+            outline: none;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        /* Provide spacing padding on the right edge so the hidden characters don't slide under the emoji icon */
+        .input-field-password {
+            padding-right: 48px;
+        }
+
+        .input-field:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+        
+        /* Absolute positioned visibility eye trigger toggler click style rules */
+        .eye-toggle-btn {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            user-select: none;
+            font-size: 1.1rem;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        .eye-toggle-btn:hover {
+            opacity: 1;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--brand);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-submit:hover { background: #2563eb; transform: translateY(-1px); }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="brand-header">🚀 <span>Project Hub Login</span></div>
+        <div class="subtitle">Welcome back! Access your team boards.</div>
+        
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <input class="input-field" type="email" name="email" value="" placeholder="Email address" autocomplete="email" required>
+            </div>
+            <div class="form-group">
+                <div class="password-wrapper">
+                    <input id="managerPassword" class="input-field input-field-password" type="password" name="password" placeholder="Password" required>
+                    <span id="toggleManagerPassword" class="eye-toggle-btn">👁️</span>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">Log In</button>
+        </form>
+    </div>
+
+    <script>
+        const toggleBtn = document.getElementById('toggleManagerPassword');
+        const passwordInput = document.getElementById('managerPassword');
+
+        toggleBtn.addEventListener('click', function () {
+            // Swap between protected text masking values
+            const isMasked = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isMasked ? 'text' : 'password');
+            
+            // Adjust current inline text emoji design look status layout properties
+            this.textContent = isMasked ? '🙈' : '👁️';
+        });
+    </script>
+
+</body>
+</html>

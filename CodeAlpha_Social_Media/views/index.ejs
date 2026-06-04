@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialAlpha | Main Timeline Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-surface: #111827;
+            --bg-card: #1f2937;
+            --brand: #3b82f6;
+            --brand-glow: rgba(59, 130, 246, 0.15);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --accent-pink: #ec4899;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .layout-container {
+            display: flex;
+            width: 100%;
+            max-width: 1250px;
+        }
+        
+        .sidebar {
+            width: 260px;
+            padding: 30px 20px;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .brand {
+            font-size: 24px;
+            color: var(--brand);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 25px;
+            padding-left: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-welcome-card {
+            background: linear-gradient(135deg, var(--bg-surface), var(--bg-card));
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border: 1px solid var(--border-color);
+            line-height: 1.5;
+        }
+
+        .user-welcome-card strong {
+            color: var(--brand);
+            font-size: 15px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--brand-glow);
+            color: var(--brand);
+            transform: translateX(4px);
+        }
+        
+        .feed-container {
+            flex: 1;
+            border-right: 1px solid var(--border-color);
+            padding: 30px;
+            max-width: 650px;
+        }
+
+        .feed-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+        }
+        
+        .composer-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .composer-box textarea {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+            resize: none;
+            color: var(--text-main);
+            min-height: 70px;
+        }
+
+        .composer-box textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .composer-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        .btn-post {
+            background: var(--brand);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-post:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .post-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .author-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--brand), #1d4ed8);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+        }
+
+        .author-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .author-name {
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .author-name:hover {
+            color: var(--brand);
+        }
+
+        .author-role {
+            background: rgba(255, 255, 255, 0.06);
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            color: var(--text-muted);
+            width: max-content;
+            font-weight: 500;
+        }
+
+        .crud-controls button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            margin-left: 6px;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .crud-controls button:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .post-content {
+            font-size: 15px;
+            margin: 12px 0;
+            line-height: 1.6;
+            color: #e5e7eb;
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-action-form button {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .btn-action-form button:hover {
+            color: var(--accent-pink);
+        }
+
+        .replies-counter {
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .comment-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .comment-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+
+        .comment-item:last-of-type {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .comment-item strong {
+            color: var(--brand);
+            margin-right: 4px;
+        }
+
+        .comment-input-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .comment-input-form input {
+            flex: 1;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 10px;
+            outline: none;
+            font-size: 13px;
+            transition: border-color 0.2s ease;
+        }
+
+        .comment-input-form input:focus {
+            border-color: var(--brand);
+        }
+        
+        .right-sidebar {
+            width: 300px;
+            padding: 30px;
+        }
+
+        .guidelines-card {
+            background: var(--bg-surface);
+            padding: 20px;
+            border-radius: 16px;
+            line-height: 1.6;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            font-size: 13.5px;
+        }
+
+        .guidelines-card h4 {
+            margin-bottom: 10px;
+            color: var(--text-main);
+            font-size: 15px;
+            font-weight: 700;
+        }
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 24px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .modal-close-btn {
+            cursor: pointer;
+            font-size: 22px;
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+
+        .modal-close-btn:hover {
+            color: var(--text-main);
+        }
+
+        .modal-body-scroll {
+            max-height: 260px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-right: 4px;
+        }
+
+        .modal-body-content {
+            font-size: 13.5px;
+            color: var(--text-main);
+            background: rgba(255,255,255,0.03);
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Interactive Message Box Styling */
+        .chat-input-tray {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 14px;
+        }
+
+        .chat-input-tray input {
+            flex: 1;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 14px;
+            border-radius: 8px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .chat-input-tray button {
+            background: var(--brand);
+            color: white;
+            border: none;
+            padding: 0 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .chat-input-tray button:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout-container">
+    
+    <div class="sidebar">
+        <div class="brand">🚀 SocialAlpha</div>
+        <div class="user-welcome-card">
+            Logged in as:<br><strong>@<%= user.username %></strong>
+            <br><a href="/" style="color: var(--accent-pink); font-size:12px; text-decoration:none; font-weight:600; display:inline-block; margin-top:6px;">Sign Out</a>
+        </div>
+        
+        <a href="/index" class="nav-link" style="color: var(--brand); background: var(--brand-glow);">🏠 Home Feed</a>
+        <a href="/profile/<%= user.username %>" class="nav-link">👤 My Profile</a>
+        <div class="nav-link" onclick="toggleModal('notifModal')">🔔 Notifications</div>
+        <div class="nav-link" onclick="toggleModal('msgModal')">✉️ Messages</div>
+    </div>
+    
+    <div class="feed-container">
+        <div class="feed-title">Home Feed</div>
+        
+        <div class="composer-box">
+            <form action="/create-post" method="POST">
+                <textarea name="content" placeholder="Share your thoughts, projects, or what you're working on... 🚀" rows="3" required></textarea>
+                <div class="composer-actions">
+                    <button type="submit" class="btn-post">Post Update</button>
+                </div>
+            </form>
+        </div>
+        
+        <% posts.forEach(function(post) { %>
+            <div class="post-card" id="card-<%= post.id %>">
+                <div class="post-header">
+                    <div class="author-meta">
+                        <a href="/profile/<%= post.author %>" class="avatar-circle"><%= post.author.charAt(0).toUpperCase() %></a>
+                        <div class="author-info">
+                            <a href="/profile/<%= post.author %>" class="author-name">@<%= post.author %></a>
+                            <span class="author-role"><%= post.role %></span>
+                        </div>
+                    </div>
+                    
+                    <% if (post.author === user.username) { %>
+                        <div class="crud-controls">
+                            <button onclick="triggerEditPost('<%= post.id %>')" title="Edit Post">✏️</button>
+                            <button onclick="triggerDeletePost('<%= post.id %>')" title="Delete Post">🗑️</button>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <div class="post-content" id="content-<%= post.id %>"><%= post.content %></div>
+                
+                <div class="actions-bar">
+                    <form action="/like-post" method="POST" class="btn-action-form">
+                        <input type="hidden" name="postId" value="<%= post.id %>">
+                        <button type="submit">❤️ <%= post.likes %></button>
+                    </form>
+                    <span class="replies-counter">💬 <%= post.comments.length %> Replies</span>
+                </div>
+                
+                <div class="comment-box">
+                    <% post.comments.forEach(function(comment) { %>
+                        <div class="comment-item">
+                            <strong>@<%= comment.author %>:</strong> <%= comment.text %>
+                        </div>
+                    <% }); %>
+                    
+                    <form action="/comment-post" method="POST" class="comment-input-form">
+                        <input type="hidden" name="postId" value="<%= post.id %>">
+                        <input type="text" name="commentText" placeholder="Write your response message..." required>
+                    </form>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+    
+    <div class="right-sidebar">
+        <div class="guidelines-card">
+            <h4>Platform Guidelines</h4>
+            Track timeline details and active interactions directly inside your dashboard window.
+        </div>
+    </div>
+</div>
+
+<div id="notifModal" class="modal-overlay" onclick="closeModalOutside(event, 'notifModal')">
+    <div class="modal-card">
+        <div class="modal-header">
+            <span>Notifications</span>
+            <span class="modal-close-btn" onclick="toggleModal('notifModal')">×</span>
+        </div>
+        <div class="modal-body-scroll">
+            <% notifications.forEach(function(notif) { %>
+                <div class="modal-body-content">
+                    ❤️ <strong><%= notif.message %></strong>
+                    <div style="font-size:11px; color: var(--text-muted); margin-top:4px;"><%= notif.timestamp %></div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
+
+<div id="msgModal" class="modal-overlay" onclick="closeModalOutside(event, 'msgModal')">
+    <div class="modal-card">
+        <div class="modal-header">
+            <span>Direct Messages</span>
+            <span class="modal-close-btn" onclick="toggleModal('msgModal')">×</span>
+        </div>
+        <div class="modal-body-scroll" id="dm-messages-box">
+            <% messages.forEach(function(msg) { %>
+                <div class="modal-body-content">
+                    <strong>@<%= msg.author %></strong>
+                    <div style="margin-top:4px;"><%= msg.message %></div>
+                    <div style="font-size:11px; color: var(--text-muted); margin-top:4px;"><%= msg.timestamp %></div>
+                </div>
+            <% }); %>
+        </div>
+        <div class="chat-input-tray">
+            <input type="text" id="live-dm-input" placeholder="Type a secure message response..." required />
+            <button onclick="dispatchLiveDM()">Send</button>
+        </div>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+    const activeUser = "<%= user.username %>";
+
+    function toggleModal(id) {
+        const modal = document.getElementById(id);
+        modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+    }
+    
+    function closeModalOutside(event, id) {
+        if (event.target.id === id) {
+            toggleModal(id);
+        }
+    }
+
+    // --- REAL-TIME INTERACTIVE MESSAGING CLIENT LAYER ---
+    function dispatchLiveDM() {
+        const inputField = document.getElementById('live-dm-input');
+        const textMessage = inputField.value.trim();
+        if(!textMessage) return;
+
+        // Emit message payload link safely down websocket pipelines
+        socket.emit('send_direct_message', { message: textMessage });
+        inputField.value = '';
+    }
+
+    // Synchronize incoming stream broadcasts down to active UI view boards
+    socket.on('receive_direct_message_broadcast', (msg) => {
+        const dmContainer = document.getElementById('dm-messages-box');
+        const messageBubble = document.createElement('div');
+        messageBubble.className = "modal-body-content";
+        messageBubble.innerHTML = `
+            <strong>@${msg.author}</strong>
+            <div style="margin-top:4px;">${msg.message}</div>
+            <div style="font-size:11px; color: var(--text-muted); margin-top:4px;">${msg.timestamp}</div>
+        `;
+        dmContainer.appendChild(messageBubble);
+        dmContainer.scrollTop = dmContainer.scrollHeight; // Auto-scroll to latest message
+    });
+
+    // --- CLIENT REAL-TIME INLINE POST UTILITY UPDATES (CRUD) ---
+    async function triggerEditPost(postId) {
+        const textBlock = document.getElementById(`content-${postId}`);
+        const currentContent = textBlock.innerText;
+        const freshInputText = prompt("Modify your platform timeline thought content updates:", currentContent);
+        
+        if (freshInputText && freshInputText.trim() !== "" && freshInputText !== currentContent) {
+            const response = await fetch('/api/edit-post', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ postId: postId, newContent: freshInputText })
+            });
+            const data = await response.json();
+            if(!data.success) alert("Error saving inline post modifications.");
+        }
+    }
+
+    async function triggerDeletePost(postId) {
+        if(confirm("Confirm removal of this active timeline update?")) {
+            const response = await fetch('/api/delete-post', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ postId: postId })
+            });
+            const data = await response.json();
+            if(!data.success) alert("Error removing targeted platform update card.");
+        }
+    }
+
+    // Real-Time UI Broadcast Interceptors
+    socket.on('post_edited_broadcast', (data) => {
+        const targetedBlock = document.getElementById(`content-${data.id}`);
+        if(targetedBlock) targetedBlock.innerText = data.content;
+    });
+
+    socket.on('post_deleted_broadcast', (data) => {
+        const targetedCard = document.getElementById(`card-${data.id}`);
+        if(targetedCard) targetedCard.remove();
+    });
+</script>
+
+</body>
+</html>

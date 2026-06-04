@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialAlpha | Log In</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-surface: #111827;
+            --bg-card: #1f2937;
+            --brand: #3b82f6;
+            --brand-glow: rgba(59, 130, 246, 0.15);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* Centered login component panel layout card */
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .brand-header {
+            font-size: 24px;
+            color: var(--text-main);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .brand-header span {
+            color: var(--brand);
+        }
+
+        .subtitle {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        /* Container allowing eye positioning absolute alignment overlay rules */
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-field {
+            width: 100%;
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px 16px;
+            border-radius: 12px;
+            outline: none;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        /* Make room for the eye icon so text doesn't overlap it */
+        .input-field-password {
+            padding-right: 46px; 
+        }
+
+        .input-field:focus {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px var(--brand-glow);
+        }
+
+        /* Transparent layout rules overlaying click triggers directly inside form vectors */
+        .password-toggle-btn {
+            position: absolute;
+            right: 14px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+            user-select: none;
+        }
+
+        .password-toggle-btn:hover {
+            color: var(--text-main);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--brand);
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-submit:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .footer-text {
+            margin-top: 25px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .footer-text a {
+            color: var(--brand);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="brand-header">
+            🚀 <span>SocialAlpha</span>
+        </div>
+        <div class="subtitle">Welcome back! Please login to your account.</div>
+        
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <input class="input-field" type="email" name="email" placeholder="Email address" required>
+            </div>
+            
+            <div class="form-group">
+                <div class="password-wrapper">
+                    <input class="input-field input-field-password" id="passwordInput" type="password" name="password" placeholder="Password" required>
+                    <button type="button" class="password-toggle-btn" id="togglePasswordBtn" title="Toggle password visibility">
+                        👁️
+                    </button>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-submit">Log In</button>
+        </form>
+        
+        <div class="footer-text">
+            Don't have an account? <a href="#">Sign Up free</a>
+        </div>
+    </div>
+
+    <!-- Client-Side DOM Mutation Handler flinging context inputs dynamically -->
+    <script>
+        const passwordInput = document.getElementById('passwordInput');
+        const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+
+        togglePasswordBtn.addEventListener('click', function() {
+            // Flip the input type field dynamically
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                togglePasswordBtn.textContent = '🔒'; // Changes to a lock emblem when visible
+            } else {
+                passwordInput.type = 'password';
+                togglePasswordBtn.textContent = '👁️'; // Changes back to open eye when hidden
+            }
+        });
+    </script>
+
+</body>
+</html>

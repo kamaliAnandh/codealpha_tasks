@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= board.name %> | Workspace Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-surface: #111827;
+            --bg-card: #1f2937;
+            --brand: #3b82f6;
+            --brand-glow: rgba(59, 130, 246, 0.15);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-main); color: var(--text-main); padding: 30px; min-height: 100vh; display: flex; flex-direction: column; }
+        .board-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .left-nav { display: flex; align-items: center; gap: 15px; }
+        .back-link { text-decoration: none; color: var(--brand); font-weight: 700; font-size: 14px; background: var(--brand-glow); padding: 8px 14px; border-radius: 8px; transition: all 0.2s; }
+        .back-link:hover { background: var(--brand); color: white; }
+        .board-title { font-size: 22px; font-weight: 800; }
+        .board-description { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+        .kanban-container { display: flex; gap: 20px; flex: 1; align-items: flex-start; overflow-x: auto; padding-bottom: 15px; }
+        .kanban-list { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; width: 320px; min-width: 320px; max-height: 85vh; display: flex; flex-direction: column; padding: 16px; }
+        .list-header { font-size: 15px; font-weight: 700; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; color: var(--text-main); border-left: 3px solid var(--brand); padding-left: 8px; }
+        .task-counter { background: rgba(255, 255, 255, 0.06); padding: 2px 8px; border-radius: 20px; font-size: 12px; color: var(--text-muted); }
+        .task-cards-wrapper { display: flex; flex-direction: column; gap: 12px; overflow-y: auto; flex: 1; margin-bottom: 15px; }
+        
+        .task-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
+        .task-card:hover { transform: translateY(-2px); border-color: var(--brand); }
+        
+        .task-title { font-size: 14.5px; font-weight: 700; margin-bottom: 6px; color: #ffffff; }
+        .task-desc { font-size: 13px; color: var(--text-muted); line-height: 1.4; margin-bottom: 10px; }
+        .task-assignee { font-size: 11px; background: rgba(59, 130, 246, 0.1); color: var(--brand); padding: 3px 8px; border-radius: 6px; font-weight: 600; width: max-content; }
+        .quick-creator-form { border-top: 1px solid var(--border-color); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+        
+        /* Uniform input elements style adjustments */
+        .form-input, .form-select { width: 100%; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 12px; border-radius: 8px; outline: none; font-size: 12.5px; }
+        .form-select option { background: var(--bg-surface); color: var(--text-main); }
+        
+        .btn-add-task { background: var(--brand); color: white; border: none; padding: 8px; border-radius: 8px; font-size: 12.5px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn-add-task:hover { background: #2563eb; }
+        .logout-btn { text-decoration: none; font-size: 12px; color: #f87171; background: rgba(248, 113, 113, 0.1); padding: 6px 12px; border-radius: 6px; font-weight: 600; border: 1px solid rgba(248, 113, 113, 0.2); transition: all 0.2s; }
+        .logout-btn:hover { background: #f87171; color: white; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: var(--bg-surface); border: 1px solid var(--border-color); width: 100%; max-width: 500px; border-radius: 20px; padding: 25px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 20px; background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; }
+        .modal-task-title { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+        .modal-section-title { font-size: 13px; font-weight: 700; color: var(--brand); margin: 15px 0 6px 0; }
+        .comments-stream { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 12px; max-height: 180px; overflow-y: auto; padding: 12px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .comment-bubble { font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 6px; }
+        .comment-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 2px; }
+        .comment-meta strong { color: var(--brand); }
+    </style>
+</head>
+<body>
+
+    <div class="board-header">
+        <div class="left-nav">
+            <a href="/dashboard" class="back-link">← All Boards</a>
+            <div>
+                <div class="board-title">📁 <%= board.name %></div>
+                <div class="board-description"><%= board.description %></div>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="font-size: 13.5px; color: var(--text-muted); text-align: right;">Operator: <strong>@<%= user.username %></strong></div>
+            <a href="/logout" class="logout-btn">Log Out</a>
+        </div>
+    </div>
+
+    <div class="kanban-container">
+        <% board.lists.forEach(function(list) { %>
+            <div class="kanban-list">
+                <div class="list-header">
+                    <span><%= list.name %></span>
+                    <span class="task-counter"><%= list.tasks.length %></span>
+                </div>
+
+                <div class="task-cards-wrapper">
+                    <% list.tasks.forEach(function(task) { %>
+                        <div class="task-card" 
+                             data-id="<%= task.id %>"
+                             data-title="<%= task.title %>"
+                             data-desc="<%= task.desc %>"
+                             data-assigned="<%= task.assignedTo %>"
+                             data-comments="<%= JSON.stringify(task.comments || []) %>"
+                             onclick="handleCardClick(this)">
+                            <div class="task-title"><%= task.title %></div>
+                            <div class="task-desc"><%= task.desc %></div>
+                            <div class="task-assignee">👤 Assignee: @<%= task.assignedTo %></div>
+                        </div>
+                    <% }); %>
+                </div>
+
+                <form action="/board/<%= board.id %>/create-task" method="POST" class="quick-creator-form">
+                    <input type="hidden" name="targetList" value="<%= list.name %>">
+                    <input type="text" name="taskTitle" class="form-input" placeholder="Task headline summary..." required>
+                    <input type="text" name="taskDesc" class="form-input" placeholder="Short description info..." required>
+                    
+                    <select name="assignTo" class="form-select" required>
+                        <option value="" disabled selected>Select Team Member...</option>
+                        <% team.forEach(function(member) { %>
+                            <option value="<%= member.username %>">@<%= member.username %></option>
+                        <% }); %>
+                    </select>
+
+                    <button type="submit" class="btn-add-task">+ Add Task Card</button>
+                </form>
+            </div>
+        <% }); %>
+    </div>
+
+    <div id="taskModal" class="modal-overlay" onclick="closeTaskModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-modal" onclick="document.getElementById('taskModal').style.display='none'">×</button>
+            <div id="modalTitle" class="modal-task-title">Task Title</div>
+            
+            <div class="modal-section-title">Description</div>
+            <div id="modalDesc" style="font-size:13.5px; color: var(--text-muted); line-height:1.4;">Details...</div>
+            
+            <div class="modal-section-title">Assigned Team Member</div>
+            <div id="modalAssignee" class="task-assignee">👤 Unassigned</div>
+
+            <div class="modal-section-title">Communication & Comments Feed</div>
+            <div id="modalCommentsStream" class="comments-stream"></div>
+
+            <form id="commentForm" onsubmit="submitComment(event)" style="display:flex; gap:8px;">
+                <input type="hidden" id="modalTaskId">
+                <input type="text" id="commentInput" class="form-input" placeholder="Write an update comment..." required>
+                <button type="submit" class="btn-add-task" style="padding:0 15px;">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const currentBoardId = "<%= board.id %>";
+
+        socket.emit('joinBoard', currentBoardId);
+
+        function handleCardClick(element) {
+            const id = element.getAttribute('data-id');
+            const title = element.getAttribute('data-title');
+            const desc = element.getAttribute('data-desc');
+            const assignedTo = element.getAttribute('data-assigned');
+            const commentsData = element.getAttribute('data-comments');
+
+            document.getElementById('modalTaskId').value = id;
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDesc').innerText = desc;
+            document.getElementById('modalAssignee').innerText = "👤 Assignee: @" + assignedTo;
+            
+            const stream = document.getElementById('modalCommentsStream');
+            stream.innerText = ''; 
+            
+            try {
+                const comments = JSON.parse(commentsData);
+                comments.forEach(comment => appendCommentToUI(comment));
+            } catch(e) { console.error(e); }
+
+            document.getElementById('taskModal').style.display = 'flex';
+        }
+
+        function closeTaskModal(e) {
+            if(e.target.id === 'taskModal') document.getElementById('taskModal').style.display = 'none';
+        }
+
+        function appendCommentToUI(comment) {
+            const stream = document.getElementById('modalCommentsStream');
+            const bubble = document.createElement('div');
+            bubble.className = 'comment-bubble';
+            bubble.innerHTML = `
+                <div class="comment-meta"><strong>@${comment.user}</strong> • ${comment.timestamp}</div>
+                <div>${comment.text}</div>
+            `;
+            stream.appendChild(bubble);
+            stream.scrollTop = stream.scrollHeight;
+        }
+
+        function submitComment(e) {
+            e.preventDefault();
+            const taskId = document.getElementById('modalTaskId').value;
+            const text = document.getElementById('commentInput').value;
+
+            fetch(`/board/${currentBoardId}/task/${taskId}/comment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ commentText: text })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) { document.getElementById('commentInput').value = ''; }
+            });
+        }
+
+        socket.on('taskCreated', (data) => {
+            const columns = document.querySelectorAll('.kanban-list');
+            columns.forEach(column => {
+                const headerText = column.querySelector('.list-header span').innerText.trim();
+                if (headerText === data.listName) {
+                    const wrapper = column.querySelector('.task-cards-wrapper');
+                    const generatedCard = document.createElement('div');
+                    generatedCard.className = 'task-card';
+                    
+                    generatedCard.setAttribute('data-id', data.task.id);
+                    generatedCard.setAttribute('data-title', data.task.title);
+                    generatedCard.setAttribute('data-desc', data.task.desc);
+                    generatedCard.setAttribute('data-assigned', data.task.assignedTo);
+                    generatedCard.setAttribute('data-comments', JSON.stringify(data.task.comments || []));
+                    generatedCard.setAttribute('onclick', 'handleCardClick(this)');
+                    
+                    generatedCard.innerHTML = `
+                        <div class="task-title">${data.task.title}</div>
+                        <div class="task-desc">${data.task.desc}</div>
+                        <div class="task-assignee">👤 Assignee: @${data.task.assignedTo}</div>
+                    `;
+                    wrapper.appendChild(generatedCard);
+
+                    const countBadge = column.querySelector('.task-counter');
+                    countBadge.innerText = parseInt(countBadge.innerText) + 1;
+                }
+            });
+        });
+
+        socket.on('commentAdded', (data) => {
+            const openTaskId = document.getElementById('modalTaskId').value;
+            if (openTaskId === data.taskId) {
+                appendCommentToUI(data.comment);
+                const activeCard = document.querySelector(`.task-card[data-id="${data.taskId}"]`);
+                if (activeCard) {
+                    try {
+                        let comments = JSON.parse(activeCard.getAttribute('data-comments') || '[]');
+                        comments.push(data.comment);
+                        activeCard.setAttribute('data-comments', JSON.stringify(comments));
+                    } catch(err) {}
+                }
+            }
+        });
+    </script>
+</body>
+</html>
