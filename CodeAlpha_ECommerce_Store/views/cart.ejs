@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | CodeAlpha Store</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body style="font-family: 'Poppins', sans-serif; background-color: #f8f9fa; margin: 0; padding: 40px 5%;">
+
+    <header style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #2c3e50; font-size: 2.5rem; margin-bottom: 10px;">Shopping Cart 🛒</h1>
+        <p style="color: #7f8c8d;">Review your items before placing the order.</p>
+    </header>
+
+    <main style="max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
+        
+        <% if (cartItems.length === 0) { %>
+            <div style="text-align: center; padding: 50px 0;">
+                <h3 style="color: #bdc3c7;">Your cart feels a bit light...</h3>
+                <p style="color: #7f8c8d; margin-bottom: 30px;">It looks like you haven't added any gadgets yet.</p>
+                <a href="/" style="background: #3498db; color: white; text-decoration: none; padding: 12px 30px; border-radius: 10px; font-weight: 600;">Explore Products</a>
+            </div>
+        <% } else { %>
+            
+            <div style="margin-bottom: 30px;">
+                <% cartItems.forEach(item => { %>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid #f1f1f1;">
+                        <div style="display: flex; align-items: center; gap: 20px;">
+                            <img src="<%= item.img %>" alt="<%= item.name %>" style="width: 70px; height: 70px; object-fit: contain; background: #fcfcfc; border-radius: 10px; border: 1px solid #eee;">
+                            <div>
+                                <h4 style="margin: 0; color: #2c3e50; font-size: 1.1rem;"><%= item.name %></h4>
+                                <span style="color: #27ae60; font-weight: 600;">$<%= item.price %></span>
+                            </div>
+                        </div>
+
+                        <form action="/remove-from-cart" method="POST" style="box-shadow: none; padding: 0; margin: 0; background: transparent;">
+                            <input type="hidden" name="productId" value="<%= item.id %>">
+                            <button type="submit" style="background: #fff; color: #e74c3c; border: 1px solid #e74c3c; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s;">
+                                Remove
+                            </button>
+                        </form>
+                    </div>
+                <% }) %>
+            </div>
+
+            <div style="background: #fdfdfd; padding: 25px; border-radius: 15px; border: 1px solid #f0f0f0;">
+                <% let total = cartItems.reduce((sum, item) => sum + item.price, 0); %>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <span style="font-size: 1.2rem; color: #7f8c8d;">Grand Total:</span>
+                    <span style="font-size: 2rem; color: #2c3e50; font-weight: 600;">$<%= total %></span>
+                </div>
+
+                <div style="display: flex; gap: 15px;">
+                    <a href="/" style="flex: 1; text-align: center; text-decoration: none; color: #2c3e50; background: #eee; padding: 15px; border-radius: 12px; font-weight: 600; transition: 0.3s;">
+                        Continue Shopping
+                    </a>
+                    
+                    <form action="/checkout" method="POST" style="flex: 2; box-shadow: none; padding: 0; margin: 0; background: transparent;">
+                        <button type="submit" style="width: 100%; background: #27ae60; color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);">
+                            Order Now
+                        </button>
+                    </form>
+                </div>
+            </div>
+        <% } %>
+        
+    </main>
+
+    <footer style="text-align: center; margin-top: 50px; color: #bdc3c7; font-size: 0.9rem;">
+        <p>&copy; 2026 CodeAlpha Internship | Secure Checkout</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= product.name %> | CodeAlpha Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #3498db; --bg: #fdfdfd; --dark: #2c3e50; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); margin: 0; }
+
+        /* Header matching the home page */
+        header { background: var(--dark); padding: 1.2rem 5%; color: white; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+        .container { 
+            max-width: 1100px; 
+            margin: 50px auto; 
+            display: flex; 
+            gap: 60px; 
+            background: white; 
+            padding: 50px; 
+            border-radius: 30px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.05);
+            align-items: center;
+        }
+
+        /* Image Section */
+        .image-box { flex: 1; text-align: center; background: #f9f9f9; padding: 40px; border-radius: 20px; }
+        .product-img { max-width: 100%; height: 350px; object-fit: contain; transition: transform 0.5s ease; }
+        .image-box:hover .product-img { transform: scale(1.05); }
+
+        /* Content Section */
+        .content { flex: 1; }
+        .category-tag { background: #e1f0ff; color: var(--primary); padding: 5px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .product-title { font-size: 2.5rem; color: var(--dark); margin: 15px 0; font-weight: 800; letter-spacing: -1px; }
+        .price-tag { color: #27ae60; font-size: 2.2rem; font-weight: 800; margin: 20px 0; }
+        .desc-text { color: #6c7a89; line-height: 1.8; font-size: 1rem; margin-bottom: 30px; }
+
+        /* Buttons */
+        .cart-btn { 
+            background: #1a1a1a; 
+            color: white; 
+            border: none; 
+            padding: 18px 40px; 
+            border-radius: 15px; 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .cart-btn:hover { background: var(--primary); transform: translateY(-3px); box-shadow: 0 15px 25px rgba(52,152,219,0.3); }
+        
+        .back-link { display: inline-block; margin-top: 25px; color: #bdc3c7; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s; }
+        .back-link:hover { color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #bdc3c7;">
+            <span>📍</span>
+            <span>Deliver to: <strong style="color: white;">Coimbatore, TN</strong></span>
+        </div>
+        <h2 style="margin:0; letter-spacing: 2px; font-weight: 800;">CODE<span style="color:#3498db;">ALPHA</span></h2>
+        <nav>
+            <a href="/" style="color:white; text-decoration:none; font-weight:600;">Home</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="image-box">
+            <img src="<%= product.img %>" alt="<%= product.name %>" class="product-img">
+        </div>
+
+        <div class="content">
+            <span class="category-tag"><%= product.category %></span>
+            <h1 class="product-title"><%= product.name %></h1>
+            
+            <p class="desc-text">
+                <%= product.desc %> We ensure that our <%= product.name %> meets the highest quality standards for modern innovators. Experience premium technology combined with seamless design.
+            </p>
+
+            <div class="price-tag">$<%= product.price %></div>
+
+            <form action="/add-to-cart" method="POST" style="margin: 0; padding: 0;">
+                <input type="hidden" name="productId" value="<%= product.id %>">
+                <button type="submit" class="cart-btn">Add to Cart 🛒</button>
+            </form>
+
+            <a href="/" class="back-link">← Back to Explore All Products</a>
+        </div>
+    </div>
+
+    <footer style="text-align:center; padding:40px; color:#bdc3c7;">
+        <p>&copy; 2026 CodeAlpha Internship | Coimbatore Marketplace</p>
+    </footer>
+
+</body>
+</html>
